@@ -1,0 +1,4 @@
+# IDE/Editor config files
+.idea
+
+vendor/*

@@ -1,0 +1,30 @@
+version: '3'
+
+volumes:
+  database_data:
+    driver: local
+
+services:
+  web:
+    build: ./docker/web/
+    ports:
+      - "8080:80"
+    networks:
+      - webnet
+    volumes:
+      - .:/var/www/html
+  mysql:
+      image: mariadb:latest
+      expose:
+          - 3306
+      volumes:
+          - database_data:/var/lib/mysql
+      environment:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: movies
+          MYSQL_USER: movies
+          MYSQL_PASSWORD: movies
+
+networks:
+  webnet:
+

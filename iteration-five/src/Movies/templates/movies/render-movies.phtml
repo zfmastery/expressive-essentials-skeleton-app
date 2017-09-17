@@ -1,0 +1,36 @@
+<?php $this->headTitle('All Movies'); ?>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive table-striped table-bordered">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Director</th>
+                <th>Release Date</th>
+                <th>Stars</th>
+                <th>Synopsis</th>
+                <th>Genre</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php /** @var \Movies\Entities\Movie $movie */ ?>
+            <?php foreach ($movies as $movie): ?>
+                <tr>
+                    <td><?php print $movie->getTitle(); ?></td>
+                    <td><?php print $movie->getDirector(); ?></td>
+                    <td><?php print (new \DateTime($movie->getReleaseDate()))->format('d/M/Y'); ?></td>
+                    <td><?php print $movie->getStars(); ?></td>
+                    <td><?php print $movie->getSynopsis(); ?></td>
+                    <td><?php print $movie->getGenre(); ?></td>
+                </tr
+            <?php endforeach; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6"><?php printf('Total movies: %d', count($movies)); ?></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
