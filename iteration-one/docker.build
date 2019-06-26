@@ -1,5 +1,5 @@
 # Use PHP version 7.0 with FPM
-FROM php:7.0-fpm
+FROM php:7.3-fpm
 
 # Maintainer and license information
 MAINTAINER Matthew Setter <matthew@matthewsetter.com>

@@ -6,7 +6,7 @@ volumes:
 
 services:
     nginx:
-        image: nginx
+        image: nginx:stable
         ports:
             - 8080:80
         volumes:
