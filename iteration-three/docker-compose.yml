@@ -1,8 +1,7 @@
-version: '2'
+version: '3'
 
 volumes:
-    database_data:
-        driver: local
+    php:
 
 services:
     nginx:
@@ -11,12 +10,11 @@ services:
             - 8080:80
         volumes:
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-        volumes_from:
-            - php
-
+            - php:/var/www/html
     php:
-        build: ./docker/php/
+        build:
+            context: .
         expose:
             - 9000
         volumes:
-            - .:/var/www/html
+            - php:/var/www/html

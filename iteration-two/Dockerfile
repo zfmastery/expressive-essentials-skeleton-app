@@ -14,3 +14,4 @@ WORKDIR /var/www/html
 COPY --chown=www-data:www-data . .
 
 RUN su -s /bin/ash www-data -c "composer install"
+
