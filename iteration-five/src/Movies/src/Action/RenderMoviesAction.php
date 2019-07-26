@@ -54,7 +54,6 @@ class RenderMoviesAction implements ServerMiddlewareInterface
         ServerRequestInterface $request,
         DelegateInterface $delegate
     ) {
-
         $data = [
             'movies' => $this->movieData->fetchAll()
         ];

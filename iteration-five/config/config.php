@@ -14,20 +14,26 @@ $aggregator = new ConfigAggregator([
     \Zend\Filter\ConfigProvider::class,
     \Zend\Hydrator\ConfigProvider::class,
     \Zend\Db\ConfigProvider::class,
-    \Movies\ConfigProvider::class,
+    Zend\Expressive\ConfigProvider::class,
+    Zend\Expressive\Router\ConfigProvider::class,
+
     // Include cache configuration
     new ArrayProvider($cacheConfig),
+
     // Default App module config
     App\ConfigProvider::class,
+    Movies\ConfigProvider::class,
+
     // Load application config in a pre-defined order in such a way that local settings
     // overwrite global settings. (Loaded as first to last):
     //   - `global.php`
     //   - `*.global.php`
     //   - `local.php`
     //   - `*.local.php`
-    new PhpFileProvider('config/autoload/{{,*.}global,{,*.}local}.php'),
+    new PhpFileProvider(realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php'),
+
     // Load development config if it exists
-    new PhpFileProvider('config/development.config.php'),
+    new PhpFileProvider(realpath(__DIR__) . '/development.config.php'),
 ], $cacheConfig['config_cache_path']);
 
 return $aggregator->getMergedConfig();

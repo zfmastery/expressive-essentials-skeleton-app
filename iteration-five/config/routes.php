@@ -26,5 +26,6 @@
  * );
  */
 
+/** @var \Zend\Expressive\Application $app */
 $app->get('/', Movies\Action\RenderMoviesActionPipelineFactory::class, 'home');
 $app->get('/api/ping', App\Action\PingAction::class, 'api.ping');

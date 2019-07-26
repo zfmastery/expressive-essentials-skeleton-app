@@ -1,99 +1,138 @@
-# Expressive Essentials Skeleton App
+# Expressive Skeleton and Installer
 
-This repository holds the source of a version of the Expressive app for [the Zend Expressive Essentials book](https://www.masterzendframework.com/zend-expressive-essentials/), one built using the Skeleton Installer.
+[![Build Status](https://secure.travis-ci.org/zendframework/zend-expressive-skeleton.svg?branch=master)](https://secure.travis-ci.org/zendframework/zend-expressive-skeleton)
+[![Coverage Status](https://coveralls.io/repos/github/zendframework/zend-expressive-skeleton/badge.svg?branch=master)](https://coveralls.io/github/zendframework/zend-expressive-skeleton?branch=master)
 
-## Prerequisites
+*Begin developing PSR-7 middleware applications in seconds!*
 
-There are two prerequisites for this project:
+[zend-expressive](https://github.com/zendframework/zend-expressive) builds on
+[zend-stratigility](https://github.com/zendframework/zend-stratigility) to
+provide a minimalist PSR-7 middleware framework for PHP with routing, DI
+container, optional templating, and optional error handling capabilities.
 
-- [Git](https://git-scm.com), as you need to clone the source.
-- [Docker](https://docs.docker.com/engine/installation/#supported-platforms), as that provides a complete runtime environment for running the code.
+This installer will setup a skeleton application based on zend-expressive by
+choosing optional packages based on user input as demonstrated in the following
+screenshot:
 
-## Installation
+![screenshot-installer](https://cloud.githubusercontent.com/assets/459648/10410494/16bdc674-6f6d-11e5-8190-3c1466e93361.png)
 
-To install it, clone the source as follows:
+The user selected packages are saved into `composer.json` so that everyone else
+working on the project have the same packages installed. Configuration files and
+templates are prepared for first use. The installer command is removed from
+`composer.json` after setup succeeded, and all installer related files are
+removed.
 
-```console
-git clone git@github.com:zfmastery/expressive-essentials-skeleton-app.git expressive-essentials-skeleton-app
+## Getting Started
+
+Start your new Expressive project with composer:
+
+```bash
+$ composer create-project zendframework/zend-expressive-skeleton <project-path>
 ```
 
-## Running the Application
+After choosing and installing the packages you want, go to the
+`<project-path>` and start PHP's built-in web server to verify installation:
 
-Running the application, currently, requires Docker.
-If you've never used Docker before, [you need to install it](https://docs.docker.com/engine/installation/#supported-platforms).
-The Docker website has plenty of instructions about doing so, no matter if you're on *Windows*, *macOS*, or *Linux*.
-After you've installed Docker, from the terminal, in the top-level directory of the cloned source, run the following command:
-
-```console
-docker-compose up -d --build
+```bash
+$ composer run --timeout=0 serve
 ```
 
-The first time that the command runs takes a few minutes, depending on your internet connection speed, as the Docker images need to download before they can start.
-Anytime after that, the build happens very quickly.
-Either way, you should see output similar to the following:
+You can then browse to http://localhost:8080.
 
-```console
-Building web
-Step 1/7 : FROM php:7.0-apache
- ---> 23f9c84560a6
-Step 2/7 : WORKDIR /var/www/html
- ---> Using cache
- ---> 6fd5d5375996
-Step 3/7 : COPY ./ /var/www/html/
- ---> Using cache
- ---> 3877cacacfee
-Step 4/7 : COPY ./files/default.conf /etc/apache2/sites-enabled/000-default.conf
- ---> Using cache
- ---> 750ea07a8e22
-Step 5/7 : EXPOSE 80
- ---> Using cache
- ---> f65a205369cf
-Step 6/7 : RUN a2enmod -q rewrite
- ---> Using cache
- ---> 92c76f431daf
-Step 7/7 : RUN docker-php-ext-install pdo_mysql     && docker-php-ext-install json
- ---> Using cache
- ---> f2d98d7927f8
-Successfully built f2d98d7927f8
-Successfully tagged iterationfive_web:latest
-Starting iterationfive_web_1 ...
-Starting iterationfive_web_1
-Starting iterationfive_mysql_1 ...
-Starting iterationfive_web_1 ... done
+> ### Setting a timeout
+>
+> Composer commands time out after 300 seconds (5 minutes). On Linux-based
+> systems, the `php -S` command that `composer serve` spawns continues running
+> as a background process, but on other systems halts when the timeout occurs.
+>
+> As such, we recommend running the `serve` script using a timeout. This can
+> be done by using `composer run` to execute the `serve` script, with a
+> `--timeout` option. When set to `0`, as in the previous example, no timeout
+> will be used, and it will run until you cancel the process (usually via
+> `Ctrl-C`). Alternately, you can specify a finite timeout; as an example,
+> the following will extend the timeout to a full day:
+>
+> ```bash
+> $ composer run --timeout=86400 serve
+> ```
+
+## Troubleshooting
+
+If the installer fails during the ``composer create-project`` phase, please go
+through the following list before opening a new issue. Most issues we have seen
+so far can be solved by `self-update` and `clear-cache`.
+
+1. Be sure to work with the latest version of composer by running `composer self-update`.
+2. Try clearing Composer's cache by running `composer clear-cache`.
+
+If neither of the above help, you might face more serious issues:
+
+- Info about the [zlib_decode error](https://github.com/composer/composer/issues/4121).
+- Info and solutions for [composer degraded mode](https://getcomposer.org/doc/articles/troubleshooting.md#degraded-mode).
+
+## Application Development Mode Tool
+
+This skeleton comes with [zf-development-mode](https://github.com/zfcampus/zf-development-mode). 
+It provides a composer script to allow you to enable and disable development mode.
+
+### To enable development mode
+
+**Note:** Do NOT run development mode on your production server!
+
+```bash
+$ composer development-enable
 ```
 
-To confirm that the containers are running properly, run `docker-compose ps`.
-This command, like the Linux `ps` command, shows you information about the running containers.
-If everything is working properly, it should look like the following output.
+**Note:** Enabling development mode will also clear your configuration cache, to 
+allow safely updating dependencies and ensuring any new configuration is picked 
+up by your application.
 
-```console
-        Name                       Command               State          Ports
--------------------------------------------------------------------------------------
-iterationfive_mysql_1   docker-entrypoint.sh mysqld      Up      3306/tcp
-iterationfive_web_1     docker-php-entrypoint apac ...   Up      0.0.0.0:8080->80/tcp
+### To disable development mode
+
+```bash
+$ composer development-disable
 ```
 
-In the "**State**" column, you can see that both containers are marked as "**Up**", meaning that they're both running.
-In the "**Ports**" column, you can see that the NGINX container is available on the local machine on port 8080.
-If you now open `http://localhost:8080` in your web browser of choice, it should look similar to the image below.
+### Development mode status
 
-![The default route of the application](./docs/images/screenshots/default-route.png)
+```bash
+$ composer development-status
+```
 
-If you want to know more about Docker, here are some excellent resources:
+## Configuration caching
 
-- [How To Build a Local Development Environment Using Docker](https://www.masterzendframework.com/docker-development-environment/)
-- [Shipping Docker](https://serversforhackers.com/shipping-docker)
-- [Docker for Developers](https://leanpub.com/dockerfordevs)
+By default, the skeleton will create a configuration cache in
+`data/config-cache.php`. When in development mode, the configuration cache is
+disabled, and switching in and out of development mode will remove the
+configuration cache.
 
-## Found a Bug?
+You may need to clear the configuration cache in production when deploying if
+you deploy to the same directory. You may do so using the following:
 
-If you find a bug in the code, please [create a new issue](https://github.com/zfmastery/expressive-essentials-skeleton-app-manual-build/issues/new), describing what the problem is, and how you discovered it.
-I'll do my best to respond to it, as well as to correct it, as quickly as possible.
+```bash
+$ composer clear-config-cache
+```
 
-## Authors
+You may also change the location of the configuration cache itself by editing
+the `config/config.php` file and changing the `config_cache_path` entry of the
+local `$cacheConfig` variable.
 
-- [Matthew Setter](https://matthewsetter.com) - [settermjd](https://twitter.com/@settermjd)
+## Skeleton Development
 
-## License
+This section applies only if you cloned this repo with `git clone`, not when you
+installed expressive with `composer create-project ...`.
 
-This project is licensed under the MIT License - see [the LICENSE.md](LICENSE.md) file for details.
+If you want to run tests against the installer, you need to clone this repo and
+setup all dependencies with composer.  Make sure you **prevent composer running
+scripts** with `--no-scripts`, otherwise it will remove the installer and all
+tests.
+
+```bash
+$ composer update --no-scripts
+$ composer test
+```
+
+Please note that the installer tests remove installed config files and templates
+before and after running the tests.
+
+Before contributing read [the contributing guide](CONTRIBUTING.md).

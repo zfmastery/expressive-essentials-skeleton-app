@@ -1,24 +1,29 @@
 version: '3'
 
-volumes:
-  database_data:
-    driver: local
-
 services:
-  web:
-    build: ./docker/web/
-    ports:
-      - "8080:80"
-    networks:
-      - webnet
-    volumes:
-      - .:/var/www/html
+  nginx:
+      image: nginx:stable
+      ports:
+          - 8080:80
+      volumes:
+          - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+          - php:/var/www/html
+  php:
+      build:
+          context: .
+      expose:
+          - 9000
+      volumes:
+          - .:/var/www/html
   mysql:
-      image: mariadb:latest
+      image: mariadb:10.3
       expose:
           - 3306
+      ports:
+          - 3306:3306
       volumes:
           - database_data:/var/lib/mysql
+          - ./docker/mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql
       environment:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: movies
@@ -28,3 +33,6 @@ services:
 networks:
   webnet:
 
+volumes:
+  database_data:
+  php:

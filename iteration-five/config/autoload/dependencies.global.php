@@ -30,7 +30,7 @@ return [
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelper::class           => Helper\UrlHelperFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
-            Zend\Db\Adapter\Adapter::class                          => Zend\Db\Adapter\AdapterServiceFactory::class,
+
             Zend\Stratigility\Middleware\ErrorHandler::class => Container\ErrorHandlerFactory::class,
             Middleware\ErrorResponseGenerator::class         => Container\ErrorResponseGeneratorFactory::class,
             Middleware\NotFoundHandler::class                => Container\NotFoundHandlerFactory::class,

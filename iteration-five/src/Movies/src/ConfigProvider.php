@@ -2,17 +2,18 @@
 
 namespace Movies;
 
-use Movies\Action\{
-    RenderMoviesAction,
-    RenderMoviesActionDelegatorFactory,
-    RenderMoviesActionFactory,
-    RenderMoviesActionPipelineFactory,
-    RenderMoviesActionPipelineWithTraitFactory
-};
+use Movies\Action\RenderMoviesAction;
+use Movies\Action\RenderMoviesActionDelegatorFactory;
+use Movies\Action\RenderMoviesActionFactory;
+use Movies\Action\RenderMoviesActionPipelineFactory;
+use Movies\Action\RenderMoviesActionPipelineWithTraitFactory;
 use Movies\Middleware\AuthenticationMiddleware;
 use Movies\Middleware\AuthorizationMiddleware;
+use Movies\Services\Database\MovieTable;
+use Movies\Services\Database\MovieTableFactory;
 use Movies\Services\FileMovieDataService;
-use Movies\Services\Database\{TableAbstractFactory,TableGatewayAbstractFactory};
+use Movies\Services\Database\TableAbstractFactory;
+use Movies\Services\Database\TableGatewayAbstractFactory;
 
 /**
  * The configuration provider for the App module
@@ -48,13 +49,14 @@ class ConfigProvider
             'invokables' => [
                 AuthenticationMiddleware::class => AuthenticationMiddleware::class,
                 AuthorizationMiddleware::class => AuthorizationMiddleware::class,
-                'MovieData' => FileMovieDataService::class,
+                //'MovieData' => FileMovieDataService::class,
             ],
             'abstract_factories' => [
                 TableAbstractFactory::class,
                 TableGatewayAbstractFactory::class,
             ],
             'factories'  => [
+                MovieTable::class => MovieTableFactory::class,
                 RenderMoviesAction::class => RenderMoviesActionFactory::class,
                 RenderMoviesActionPipelineFactory::class => RenderMoviesActionPipelineFactory::class,
                 RenderMoviesActionPipelineWithTraitFactory::class => RenderMoviesActionPipelineWithTraitFactory::class
