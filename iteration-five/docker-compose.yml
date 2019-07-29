@@ -2,7 +2,7 @@ version: '3'
 
 services:
   nginx:
-      image: nginx
+      image: nginx:stable
       ports:
           - 8080:80
       volumes:
@@ -14,7 +14,7 @@ services:
       expose:
           - 9000
       volumes:
-          - .:/var/www/html
+          - php:/var/www/html
   mysql:
       image: mariadb
       expose:
@@ -29,9 +29,6 @@ services:
           MYSQL_DATABASE: movies
           MYSQL_USER: movies
           MYSQL_PASSWORD: movies
-
-networks:
-  webnet:
 
 volumes:
   database_data:
